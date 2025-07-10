@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import SuperJSON from 'superjson';
 // ^-- to make sure we can mount the Provider from a server component
