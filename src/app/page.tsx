@@ -1,7 +1,5 @@
-// "use client"//this is used for the client component and it also contains the trpc
 "use client";
 import { toast } from "sonner";
-
 import { useTRPC } from "@/trpc/client";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -15,7 +13,6 @@ const invoke=useMutation(trpc.invoke.mutationOptions({
     toast.success("Background Job started")
   }
 }));
-
   return (
    <div className="p-4 max-w-7xl mx-auto">
     <Input value={value} onChange={(e)=>setValue(e.target.value)}/>
