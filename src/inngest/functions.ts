@@ -2,15 +2,15 @@
 import { PROMPT } from "@/prompt";
 import { inngest } from "./client";
 import z from "zod";
-import { createAgent, openai, createTool, createNetwork,  type Tool } from '@inngest/agent-kit';
+import { createAgent, gemini, createTool, createNetwork, type Tool } from '@inngest/agent-kit';
 import { Sandbox } from "@e2b/code-interpreter";
 import { getSandbox, lastAssistantTextMessageContent } from "./utils";
 import { prisma } from "@/lib/db";
 
 
-interface AgentState{
-    summary:string;
-    files:{[path:string]:string};
+interface AgentState {
+    summary: string;
+    files: { [path: string]: string };
 };
 
 
@@ -26,11 +26,8 @@ export const BuildrAgent = inngest.createFunction(
             name: 'code-agent',
             description: "An Expert Coding Agent",
             system: PROMPT,
-            model: openai({
-                model: "gpt-4.1",
-                defaultParameters: {
-                    temperature: 0.1,
-                }
+            model: gemini({
+                model: "gemini-2.0-flash-lite",
             }),
             tools: [
                 createTool({
@@ -82,7 +79,7 @@ export const BuildrAgent = inngest.createFunction(
                     }),
                     handler: async (
                         { files },
-                        { step, network }:Tool.Options<AgentState>
+                        { step, network }: Tool.Options<AgentState>
 
                     ) => {
 
@@ -164,8 +161,8 @@ export const BuildrAgent = inngest.createFunction(
 
 
         const result = await network.run(event.data.value)
-        const isError=!result.state.data.summary ||
-        Object.keys(result.state.data.files||{}).length===0;
+        const isError = !result.state.data.summary ||
+            Object.keys(result.state.data.files || {}).length === 0;
         const sandboxUrl = await step.run("get-sandbox-url", async () => {
             const sandbox = await getSandbox(sandboxId);
             const host = sandbox.getHost(3000);
@@ -175,17 +172,20 @@ export const BuildrAgent = inngest.createFunction(
 
 
         await step.run("save-result", async () => {
-            if(isError){
+            if (isError) {
                 return await prisma.message.create({
-                    data:{
-                        content:"Something went wrong,Please try again.",
-                        role:"ASSISTANT",
-                        type:"ERROR",
+                    data: {
+                        projectId:event.data.projectId,
+                        content: "Something went wrong,Please try again.",
+                        role: "ASSISTANT",
+                        type: "ERROR",
                     },
                 });
             }
             return await prisma.message.create({
                 data: {
+                    projectId: event.data.projectId,
+
                     content: result.state.data.summary,
                     role: "ASSISTANT",
                     type: "RESULT",
