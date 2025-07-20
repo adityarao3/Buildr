@@ -2,23 +2,35 @@
 import { PROMPT } from "@/prompt";
 import { inngest } from "./client";
 import z from "zod";
-import { createAgent, openai, createTool, createNetwork } from '@inngest/agent-kit';
+import { createAgent, openai, createTool, createNetwork,  type Tool } from '@inngest/agent-kit';
 import { Sandbox } from "@e2b/code-interpreter";
 import { getSandbox, lastAssistantTextMessageContent } from "./utils";
-export const AdityaBhai = inngest.createFunction(
-    { id: "hello-worldji" },
-    { event: "test/hello.world" },
+import { prisma } from "@/lib/db";
+
+
+interface AgentState{
+    summary:string;
+    files:{[path:string]:string};
+};
+
+
+export const BuildrAgent = inngest.createFunction(
+    { id: "BuildrAgent" },
+    { event: "BuildrAgent/run" },
     async ({ event, step }) => {
         const sandboxId = await step.run("get-sandbox-id", async () => {
             const sandbox = await Sandbox.create("buildr-nextjs-test3");
             return sandbox.sandboxId;
         });
-        const codeAgent = createAgent({
+        const codeAgent = createAgent<AgentState>({
             name: 'code-agent',
             description: "An Expert Coding Agent",
             system: PROMPT,
             model: openai({
-                model: "gpt-4o-mini",
+                model: "gpt-4.1",
+                defaultParameters: {
+                    temperature: 0.1,
+                }
             }),
             tools: [
                 createTool({
@@ -70,7 +82,7 @@ export const AdityaBhai = inngest.createFunction(
                     }),
                     handler: async (
                         { files },
-                        { step, network }
+                        { step, network }:Tool.Options<AgentState>
 
                     ) => {
 
@@ -136,7 +148,7 @@ export const AdityaBhai = inngest.createFunction(
             },
 
         });
-        const network = createNetwork({
+        const network = createNetwork<AgentState>({
             name: "coding-agent-network",
             agents: [codeAgent],
             maxIter: 15,
@@ -152,14 +164,41 @@ export const AdityaBhai = inngest.createFunction(
 
 
         const result = await network.run(event.data.value)
+        const isError=!result.state.data.summary ||
+        Object.keys(result.state.data.files||{}).length===0;
         const sandboxUrl = await step.run("get-sandbox-url", async () => {
             const sandbox = await getSandbox(sandboxId);
             const host = sandbox.getHost(3000);
             return `https://${host}`;
 
-        })
-        // [{ role: 'assistant', content: 'function removeUnecessaryWhitespace(...' }]
+        });
 
+
+        await step.run("save-result", async () => {
+            if(isError){
+                return await prisma.message.create({
+                    data:{
+                        content:"Something went wrong,Please try again.",
+                        role:"ASSISTANT",
+                        type:"ERROR",
+                    },
+                });
+            }
+            return await prisma.message.create({
+                data: {
+                    content: result.state.data.summary,
+                    role: "ASSISTANT",
+                    type: "RESULT",
+                    fragment: {
+                        create: {
+                            sandboxUrl: sandboxUrl,
+                            title: "Fragment",
+                            files: result.state.data.files,
+                        }
+                    },
+                },
+            })
+        });
         return {
             url: sandboxUrl,
             title: "Fragment",
