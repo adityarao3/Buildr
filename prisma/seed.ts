@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from "../src/generated/prisma";
+import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -8,7 +8,7 @@ const userData: Prisma.UserCreateInput[] = [
         email: "alice@prisma.io",
         posts: {
             create: [
-                    {
+                {
                     title: "Join the Prisma Discord",
                     content: "https://pris.ly/discord",
                     published: true,
@@ -41,4 +41,11 @@ export async function main() {
     }
 }
 
-main();
+main()
+    .catch((e) => {
+        console.error(e);
+        process.exit(1);
+    })
+    .finally(async () => {
+        await prisma.$disconnect();
+    });
