@@ -1,5 +1,6 @@
 import {format} from "date-fns";
 import { Card } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 
 import { Fragment, MessageRole, MessageType } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
@@ -57,14 +58,18 @@ interface AssistantMessageProps{
     onFragmentClick:(fragment:Fragment)=>void;
     type:MessageType;
 };
-const AssistantMessage=({
+const AssistantMessage = ({
     content,
     fragment,
     createdAt,
     isActiveFragment,
     onFragmentClick,
     type,
-}:AssistantMessageProps)=>{
+}: AssistantMessageProps) => {
+    const [formattedDate, setFormattedDate] = useState("");
+    useEffect(() => {
+        setFormattedDate(format(createdAt, "HH:mm 'on' MMM dd,yyyy"));
+    }, [createdAt]);
     return (
         <div className={cn(
             "flex flex-col group px-2 pb-4",
@@ -80,7 +85,7 @@ const AssistantMessage=({
                />
                 <span className='text-sm font-medium'>Buildr</span>
                 <span className='text-xs text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100'>
-                    {format (createdAt,"HH:mm 'on' MMM dd,yyyy")}
+                    {formattedDate}
                 </span>
             </div>
             <div className="pl-8.5 flex flex-col gap-y-4">
