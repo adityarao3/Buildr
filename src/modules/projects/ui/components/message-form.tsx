@@ -27,7 +27,7 @@ export const MessageForm = ({ projectId }: Props) => {
   const [isFocused, setIsFocused] = useState(false);
   const trpc = useTRPC();
 
-  const router=useRouter();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { data: usage } = useQuery(trpc.usage.status.queryOptions());
   const form = useForm<z.infer<typeof formSchema>>({
@@ -44,24 +44,14 @@ export const MessageForm = ({ projectId }: Props) => {
           trpc.messages.getMany.queryOptions({ projectId })
         );
 
-queryClient.invalidateQueries(
-  trpc.usage.status.queryOptions()
-
-
-
-);
-
-
-
+        queryClient.invalidateQueries(trpc.usage.status.queryOptions());
       },
       onError: (error) => {
         toast.error(error.message);
 
-if(error.data?.code==="TOO_MANY_REQUESTS"){
-
-  router.push("/pricing");
-}
-      
+        if (error.data?.code === "TOO_MANY_REQUESTS") {
+          router.push("/pricing");
+        }
       },
     })
   );
@@ -88,7 +78,7 @@ if(error.data?.code==="TOO_MANY_REQUESTS"){
         onSubmit={form.handleSubmit(onSubmit)}
         className={cn(
           "relative border p-4 pt-1 rounded-xl bg-sidebar dark:bg-sidebar transition-all",
-          isFocused && "showdow-xs",
+          isFocused && "shadow-xs",
           showUsage && "rounded-t-none"
         )}
       >

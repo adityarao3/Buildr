@@ -46,7 +46,7 @@ export const ProjectView = ({ projectId }: Props) => {
             />
           </Suspense>
         </ResizablePanel>
-        <ResizableHandle className="hover:bg-primary tran sition-colors" />
+        <ResizableHandle className="hover:bg-primary transition-colors" />
 
         <ResizablePanel defaultSize={65} minSize={50}>
           <Tabs
@@ -74,7 +74,7 @@ export const ProjectView = ({ projectId }: Props) => {
                       Upgrade
                     </Link>
                   </Button>
-                )} 
+                )}
                 <UserControl />
               </div>
             </div>
