@@ -32,6 +32,7 @@ export const BuildrAgent = inngest.createFunction(
                 orderBy: {
                     createdAt: "desc",
                 },
+                take:5,
             });
             for (const message of messages) {
                 formattedMessages.push({
@@ -41,7 +42,7 @@ export const BuildrAgent = inngest.createFunction(
 
                 });
             }
-            return formattedMessages;
+            return formattedMessages.reverse();
         });
         const state = createState<AgentState>({
             summary: "",
@@ -246,6 +247,8 @@ export const BuildrAgent = inngest.createFunction(
             Object.keys(result.state.data.files || {}).length === 0;
         const sandboxUrl = await step.run("get-sandbox-url", async () => {
             const sandbox = await getSandbox(sandboxId);
+                    await sandbox.setTimeout(60_00*10*5)
+
             const host = sandbox.getHost(3000);
             return `https://${host}`;
 
