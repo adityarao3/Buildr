@@ -23,7 +23,7 @@ const {data:messages}=useSuspenseQuery(trpc.messages.getMany.queryOptions({
     projectId: projectId,
 },{
     //todo tempropary 
-    refetchInterval:5000,
+    refetchInterval:2000,
 }));
 
 // this is causing problems
