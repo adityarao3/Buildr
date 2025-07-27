@@ -1,6 +1,7 @@
 # Buildr
 
-![Buildr Logo](https://via.placeholder.com/200x60?text=Buildr)
+![Buildr Logo]<img width="41" height="40" alt="image" src="https://github.com/user-attachments/assets/099bec03-1d2f-4f4e-901a-1c8119f7921d" />
+
 
 ## Introduction
 
