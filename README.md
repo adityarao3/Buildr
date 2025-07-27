@@ -1,4 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Buildr
+
+![Buildr Logo](https://via.placeholder.com/200x60?text=Buildr)
+
+## Introduction
+
+Buildr is an innovative AI-powered platform that generates complete websites from simple text prompts. By leveraging advanced AI capabilities, Buildr allows users to describe their website needs in natural language, and the system automatically creates responsive, modern web designs with functional components.
+
+Simply provide a prompt describing your desired website, and Buildr will handle the rest - from layout design and component creation to responsive styling and basic functionality. Whether you need a portfolio, business site, landing page, or e-commerce platform, Buildr streamlines the web development process, making website creation accessible to everyone regardless of their technical expertise.
+
+Created by: adityarao3  
+Last Updated: 2025-07-27
+
+## Features
+
+- 🤖 AI-powered website generation from text prompts
+- 🎨 Modern UI with customizable design elements
+- 📱 Responsive layouts that work on all devices
+- 🔌 Built-in components for common website functionalities
+- 🚀 Export options for deployment
+- 💻 Built on Next.js for optimal performance
 
 ## Getting Started
 
@@ -14,23 +34,23 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open (https://buildr-delta.vercel.app/) with your browser to start building websites with AI.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To run this project locally, you'll need to set up the following environment variables in a `.env` file:
 
-## Learn More
+```
+# Database Connection
+DATABASE_URL="postgresql://username:password@localhost:5432/buildr"
 
-To learn more about Next.js, take a look at the following resources:
+# Authentication
+NEXTAUTH_SECRET="your-secure-secret-key"
+NEXTAUTH_URL="http://localhost:3000"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# OpenAI API for AI generation
+OPENAI_API_KEY="your-openai-api-key"
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Make sure to replace all placeholder values with your actual credentials. Never commit your `.env` file to version control.
