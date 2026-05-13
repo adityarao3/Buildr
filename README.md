@@ -2,11 +2,6 @@
 
 <img width="41" height="40" alt="image" src="https://github.com/user-attachments/assets/099bec03-1d2f-4f4e-901a-1c8119f7921d" />
 
-
-Here is a **template for a professional README.md** for your Buildr project, including a project introduction, structure, installation, usage, environment configuration, contribution guide, and more. This is tailored for modern AI-powered, Next.js-based platforms and incorporates directory structure representation.
-
-***
-
 # Buildr
 
 Buildr is an AI-powered platform that generates complete websites from simple text prompts. With Buildr, users can describe their website needs in natural language, and the AI will automatically create responsive, modern web designs with functional components and business logic.
@@ -118,6 +113,5 @@ Created by [adityarao3](https://github.com/adityarao3)
 
 ***
 
-Let me know if you want this tailored further (e.g., add demo prompts, code samples, or more structure explanations)!
 
 
