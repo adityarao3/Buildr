@@ -1,6 +1,6 @@
 import { FRAGMENT_TITLE_PROMPT, PROMPT, RESPONSE_PROMPT } from "@/prompt";
 import { inngest } from "./client";
-import z from "zod";
+import { z } from "zod/v4";
 import { createAgent, openai, createTool, createNetwork, type Tool, type Message, createState } from '@inngest/agent-kit';
 import { Sandbox } from "@e2b/code-interpreter";
 import { getSandbox, lastAssistantTextMessageContent } from "./utils";
@@ -15,8 +15,7 @@ interface AgentState {
 
 
 export const BuildrAgent = inngest.createFunction(
-    { id: "BuildrAgent" },
-    { event: "BuildrAgent/run" },
+    { id: "BuildrAgent", triggers: [{ event: "BuildrAgent/run" }] },
     async ({ event, step }) => {
         const sandboxId = await step.run("get-sandbox-id", async () => {
             const sandbox = await Sandbox.create("buildr-nextjs-test3");
@@ -32,7 +31,7 @@ export const BuildrAgent = inngest.createFunction(
                 orderBy: {
                     createdAt: "desc",
                 },
-                take:5,
+                take: 5,
             });
             for (const message of messages) {
                 formattedMessages.push({
@@ -59,10 +58,7 @@ export const BuildrAgent = inngest.createFunction(
             description: "An Expert Coding Agent",
             system: PROMPT,
             model: openai({
-                model: "gpt-4.1",
-                defaultParameters: {
-                    temperature: 0.1,
-                }
+                model: "gpt-5.1",
             }),
             tools: [
                 createTool({
@@ -203,7 +199,7 @@ export const BuildrAgent = inngest.createFunction(
             description: "A fragment title generator",
             system: FRAGMENT_TITLE_PROMPT,
             model: openai({
-                model: "gpt-4o",
+                model: "gpt-5-mini",
             })
         })
         const responseGenerator = createAgent({
@@ -211,7 +207,7 @@ export const BuildrAgent = inngest.createFunction(
             description: "A responsee generator",
             system: RESPONSE_PROMPT,
             model: openai({
-                model: "gpt-4o",
+                model: "gpt-5-mini",
             })
         })
         const { output: fragmentTitleOutput } = await fragmentTitleGenerator.run(result.state.data.summary);
@@ -247,7 +243,7 @@ export const BuildrAgent = inngest.createFunction(
             Object.keys(result.state.data.files || {}).length === 0;
         const sandboxUrl = await step.run("get-sandbox-url", async () => {
             const sandbox = await getSandbox(sandboxId);
-                    await sandbox.setTimeout(60_00*10*5)
+            await sandbox.setTimeout(60_00 * 10 * 5)
 
             const host = sandbox.getHost(3000);
             return `https://${host}`;

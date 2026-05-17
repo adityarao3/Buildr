@@ -1,7 +1,7 @@
 import { inngest } from "@/inngest/client";
 import { prisma } from "@/lib/db";
 import { protectedProcedure, createTRPCRouter } from "@/trpc/init";
-import z from "zod";
+import { z } from "zod/v4";
 import { TRPCError } from "@trpc/server";
 import { consumeCredits } from "@/lib/usage";
 

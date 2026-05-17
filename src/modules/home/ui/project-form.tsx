@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"; // <-- fix import
 import TextareaAutosize from "react-textarea-autosize";
-import z from "zod";
+import { z } from "zod/v4";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ArrowUpIcon, Loader2Icon } from "lucide-react";
