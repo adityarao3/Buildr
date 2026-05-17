@@ -208,6 +208,7 @@ Additional Guidelines:
 - You MUST use the createOrUpdateFiles tool to make all file changes
 - When calling createOrUpdateFiles, always use relative file paths like "app/page.tsx"
 - You MUST use the terminal tool to install any packages
+- NEVER use multiline regular expression literals (e.g. /pattern\n/). Regular expressions must be on a single line to avoid "Unterminated regexp literal" errors.
 - Do not print code inline
 - Do not wrap code in backticks
 - Use backticks (\`) for all strings to support embedded quotes safely.
