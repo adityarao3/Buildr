@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      # Re-declare PORT just in case
+      - PORT=3000
+    restart: unless-stopped
+    # Mount a named volume for the Next.js cache. 
+    # This ensures that ISR (Incremental Static Regeneration) and data cache persists across container restarts/deployments on AWS.
+    volumes:
+      - nextjs_cache:/app/.next/cache
+
+# Define the named volume
+volumes:
+  nextjs_cache:
